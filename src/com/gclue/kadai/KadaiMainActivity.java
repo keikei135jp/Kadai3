@@ -46,7 +46,6 @@ import android.widget.LinearLayout;
 public class KadaiMainActivity extends Activity implements SensorEventListener,
 		LocationListener {
 	private MyView mView;
-//	private CameraView mCamera;
 	private boolean mRegisteredSensor;	//追加
 	// Sensor Manager
 	private SensorManager mSensorManager = null;
@@ -68,7 +67,6 @@ public class KadaiMainActivity extends Activity implements SensorEventListener,
 //	int yawqua;
 	
 	private GestureDetector mGDetector = null;
-	private KadaiARView mARView = null;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -99,7 +97,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener,
 //			Sensor s = sensors.get(0);
 //			sensorManager.registerListener(this, s,
 //			SensorManager.SENSOR_DELAY_UI);
-//			Log.v("OnResume", "PASS");
+			Log.v("OnResume", "PASS");
 //			if (locman != null){
 //			locman.removeUpdates(this);
 //			locman.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -137,13 +135,13 @@ public class KadaiMainActivity extends Activity implements SensorEventListener,
 //		apiopostLocation.setLatitude(37.52144);
 //		apiopostLocation.setLongitude(139.916199);
 		//自宅
-		Location apiopostLocation = new Location("apiopost");
-		apiopostLocation.setLatitude(38.423455);
-		apiopostLocation.setLongitude(140.989182);
-		//イトナブ
 //		Location apiopostLocation = new Location("apiopost");
-//		apiopostLocation.setLatitude(38.431619);
-//		apiopostLocation.setLongitude(141.309406);
+//		apiopostLocation.setLatitude(38.423455);
+//		apiopostLocation.setLongitude(140.989182);
+		//イトナブ
+		Location apiopostLocation = new Location("apiopost");
+		apiopostLocation.setLatitude(38.431619);
+		apiopostLocation.setLongitude(141.309406);
 		//アエル
 //		Location apiopostLocation = new Location("apiopost");
 //		apiopostLocation.setLatitude(38.26229);
@@ -344,7 +342,8 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback{
 	@Override
 	public void surfaceChanged(SurfaceHolder holder,int format,int width,int height){
 		Log.i("CAMERA", "surfaceChaged");
-		 
+		
+		int num;
 		//画面設定
 		Camera.Parameters parameters =mCamera.getParameters();
 //		parameters.setPreviewSize(width, height);
@@ -381,10 +380,11 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback{
 	public void surfaceCreated(SurfaceHolder holder){
 		
 		//カメラをOpen
-		Log.i("DEBUG", "Camera open1");
-		mCamera = Camera.open();
-		Log.i("DEBUG", "Camera open2");
+//		Log.i("DEBUG", "Camera open1");
+//		mCamera = Camera.open();
+//		Log.i("DEBUG", "Camera open2");
 
+		
 		try{
 			mCamera.setPreviewDisplay(holder);
 		}catch(Exception e){	//変更
@@ -599,7 +599,7 @@ class MyView extends View {
 		myBitmap = BitmapFactory.decodeResource(res,R.drawable.kuma);
 		
 		//サウンドデータを読み込む(res/raw/pon.mp3)
-		mp = MediaPlayer.create(context, R.raw.powerup02 );	
+//		mp = MediaPlayer.create(context, R.raw.powerup02 );	
 		
 //		//WebView（追加）
 //		webView = new WebView(this);

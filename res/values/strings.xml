@@ -4,5 +4,7 @@
     <string name="app_name">Kadai</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="title_activity_top">Top</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
