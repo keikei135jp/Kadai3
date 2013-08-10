@@ -7,31 +7,40 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.View;
 
 
 public class TopActivity extends Activity {
-
+	Button btn1;
+	Button btn2;
+	Button btn3;
+	Button btn4;
+	Button btn5;
+	Button btn6;
+	Button btn7;
+	Button btn8;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		// ボタンを生成
-		Button btn1 = new Button(this);
+		btn1 = new Button(this);
 		btn1.setText("石巻");
-		Button btn2 = new Button(this);
+		btn2 = new Button(this);
 		btn2.setText("大郷");
-		Button btn3 = new Button(this);
+		btn3 = new Button(this);
 		btn3.setText("仙台");
-		Button btn4 = new Button(this);
+		btn4 = new Button(this);
 		btn4.setText("北上");
-		Button btn5 = new Button(this);
+		btn5 = new Button(this);
 		btn5.setText("滝沢");
-		Button btn6 = new Button(this);
+		btn6 = new Button(this);
 		btn6.setText("石川");
-		Button btn7 = new Button(this);
+		btn7 = new Button(this);
 		btn7.setText("青山");
-		Button btn8 = new Button(this);
+		btn8 = new Button(this);
 		btn8.setText("六本木");
 		
 		// レイアウトにボタンを追加
@@ -113,7 +122,15 @@ public class TopActivity extends Activity {
 			}
 		});
 	}
-	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		SharedPreferences prefer = getSharedPreferences("getchara", MODE_PRIVATE);
+		
+		btn1.setText(prefer.getString("石巻", ""));
+	}
 	private void showDetail(int id){
 		// TODO Auto-generated method stub
 		// インテントのインスタンス生成
@@ -122,4 +139,6 @@ public class TopActivity extends Activity {
 		// 次画面のアクティビティ起動
 		startActivity(intent);
 	}
+
+	
 }
