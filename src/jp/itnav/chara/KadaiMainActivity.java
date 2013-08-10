@@ -9,7 +9,7 @@ import java.util.List;
 
 import android.location.Location;
 //import android.location.LocationListener;
-import android.location.LocationManager;
+//import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -93,9 +94,10 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 	String yawtext;
 //	String yawtext1;
 	//String[ ]b = {"N","北東","E","南東","S","南西","W","北西"};
-	//イトナブ　大郷 アエル
-	double[ ]c={38.431619,38.423256,38.271751,39.305079,39.800261,36.662764,38.26229};
-	double[ ]d={141.309406,140.989287,140.87009,141.119523,141.137205,136.739514,140.881017};
+	//イトナブ　大郷 アエル 北上　滝沢　石川　青山　六本木
+	double[ ]c={38.431619,38.423256,38.271751,39.305079,39.800261,36.662764,35.664625,
+			35.667338,38.26229};
+	double[ ]d={141.309406,140.989287,140.87009,141.119523,141.137205,136.739514,139.711681,139.728584,140.881017};
 	
 	String goal;
 	float distance;
@@ -126,7 +128,6 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 		mView = new MyView(this,param);
 		
 		// Vewに設定
-//		setContentView(mView);
 		addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,+LayoutParams.WRAP_CONTENT));
 		
 //		mCamera.setView(mView);
@@ -214,12 +215,9 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 //			dirtext = a[7];
 //		} else if (direction >= 157.5) {
 //			dirtext = a[0];
-//		}
-		
+//		}	
 //	}
 	
-	
-
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
@@ -356,8 +354,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 				}
 				SensorManager.getOrientation(outR, out);
 			}
-		}
-	
+		}	
 	
 	private void init() {
     	// Initialize Location Client
@@ -429,7 +426,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 		mView.setDirtext("" + dirtext);	
 //		Log.v(KadaiMainActivity.TAG, "dirtext == @" +dirtext);
 		mView.setGoal(""+ goal);
-		if (distance < 	200){
+		if (distance < 	30){
 			goal="登場";	
 			CameraView mCamera = new CameraView(this);//cameraview変更
 			setContentView(mCamera);//cameraview変更
@@ -844,20 +841,15 @@ class CameraView extends SurfaceView implements SurfaceHolder.Callback{
  * オーバーレイ描画用のクラス
  */
 class MyView extends View {
-	
-//	private int mYaw;
-//	private int mRoll;
-//	private int mPitch;
-	
-//	private double mLat;
-//	private double mLon;
-	
-//	private int mCurX;
-//	private int mCurY;
-	
+	// private double mLat;
+	// private double mLon;
+
+	// private int mCurX;
+	// private int mCurY;
+
 	// Roll
 	private float roll;
-//	int mRoll = Integer.parseInt(roll);
+	// int mRoll = Integer.parseInt(roll);
 	// Yaw
 	private float yaw;
 	// Pitch
@@ -866,7 +858,7 @@ class MyView extends View {
 	private float degreeY;
 	// YawText
 	private String yawtext;
-//	private String yawtext1;
+	// private String yawtext1;
 	// Lat
 	private String lat;
 	// Lon
@@ -877,37 +869,37 @@ class MyView extends View {
 	private float direction;
 	// dirText
 	private String dirtext = "測定中";
-	//gaol
-	private String goal="Search Charactor";
-	//画像を格納する変数
-	private Bitmap myBitmap,myBitmap2;
-	//サウンド再生データを保持する。
+	// gaol
+	private String goal = "Search Charactor";
+	// 画像を格納する変数
+	private Bitmap myBitmap, myBitmap2;
+	// サウンド再生データを保持する。
 	private MediaPlayer mp;
-	//X軸方向位置
-	private float  xp;
-	//y方向位置
-	private float yp;	
-	
+	// X軸方向位置
+	private float xp;
+	// y方向位置
+	private float yp;
+
 	private int param;
 	private String zzm;
 	private String kuma;
 	private float gap;
-	
-//	/**
-//	 * 値を渡す
-//	 */
-//	public void setParam(int param) {
-//		this.param = param;
-//		invalidate();
-//	}
-	
+
+	// /**
+	// * 値を渡す
+	// */
+	// public void setParam(int param) {
+	// this.param = param;
+	// invalidate();
+	// }
+
 	// バイブレータオブジェクトを保持
 	Vibrator vibrator;
-	
-//	private WebView webView;	//追加
-//	private LinearLayout.LayoutParams arLayoutParams;
-//	private LinearLayout arLayout;	//追加
-	
+
+	// private WebView webView; //追加
+	// private LinearLayout.LayoutParams arLayoutParams;
+	// private LinearLayout arLayout; //追加
+
 	/**
 	 * コンストラクタ
 	 * 
@@ -916,60 +908,63 @@ class MyView extends View {
 	public MyView(Context context, int param) {
 		super(context);
 		setFocusable(true);
-//		String []chara = new String []{"zzm","kuma"};
-		
+		// String []chara = new String []{"zzm","kuma"};
+
 		// バイブレータを用意する
-		vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-		
-		//Resourceインスタンスの生成
+		vibrator = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+
+		// Resourceインスタンスの生成
 		Resources res = this.getContext().getResources();
-		//画像の読み込み(res/drawable/gclue_logo.gif)
-		if (param == 0 ){
-		myBitmap = BitmapFactory.decodeResource(res,R.drawable.soba);
-		} else if ( param==1 || param==2) {
-			myBitmap = BitmapFactory.decodeResource(res,R.drawable.kuma);
-		}else{
-			myBitmap = BitmapFactory.decodeResource(res,R.drawable.zzm);
+		// 画像の読み込み(res/drawable/gclue_logo.gif)
+		if (param == 3 || param == 4) {
+			myBitmap = BitmapFactory.decodeResource(res, R.drawable.soba);
+		} else if (param == 1 || param == 2 || param == 3) {
+			myBitmap = BitmapFactory.decodeResource(res, R.drawable.kuma);
+		} else {
+			myBitmap = BitmapFactory.decodeResource(res, R.drawable.zzm);
 		}
-		//サウンドデータを読み込む(res/raw/pon.mp3)
-		mp = MediaPlayer.create(context, R.raw.powerup02 );	
-		
-//		//WebView（追加）
-//		webView = new WebView(this);
-//		webView.loadUrl("http://ishiko.myswan.ne.jp/");
-//		//Web用のLayoutParams（追加）
-//		arLayoutParams = new LinearLayout.LayoutParams(200,200);
-//		arLayoutParams.setMargins(0,0,0,0);
-//		//WebWiewを張り付けるLayout（追加）
-//		arLayout = new LinearLayout(this);
-//		arLayout.addView(myBitmap,arLayoutParams);
-		//WebViewを張り付けたLayoutを画面に張り付け（追加）
-//		addContentView(arLayout,new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+		// サウンドデータを読み込む(res/raw/pon.mp3)
+		mp = MediaPlayer.create(context, R.raw.powerup02);
+
+		// //WebView（追加）
+		// webView = new WebView(this);
+		// webView.loadUrl("http://ishiko.myswan.ne.jp/");
+		// //Web用のLayoutParams（追加）
+		// arLayoutParams = new LinearLayout.LayoutParams(200,200);
+		// arLayoutParams.setMargins(0,0,0,0);
+		// //WebWiewを張り付けるLayout（追加）
+		// arLayout = new LinearLayout(this);
+		// arLayout.addView(myBitmap,arLayoutParams);
+		// WebViewを張り付けたLayoutを画面に張り付け（追加）
+		// addContentView(arLayout,new
+		// LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
 	}
 
 	/**
 	 * 値を渡す
 	 */
-//	public void setOrientation(float yaw, float pitch, float roll) {
-//		this.yaw = yaw;
-//		this.pitch = pitch;
-//		this.roll = roll;
-//		invalidate();
-//	}
+	// public void setOrientation(float yaw, float pitch, float roll) {
+	// this.yaw = yaw;
+	// this.pitch = pitch;
+	// this.roll = roll;
+	// invalidate();
+	// }
 	/**
 	 * 値を渡す
 	 */
 	public void setYaw(String yawtext) {
 		this.yawtext = yawtext;
-//		this.yawtext1= yawtext1;
+		// this.yawtext1= yawtext1;
 		invalidate();
 	}
+
 	/**
 	 * 値を渡す(degreeDir)
 	 */
 	public void setdegree(float degreeDir) {
 		this.degreeDir = degreeDir;
-		
+
 		invalidate();
 	}
 
@@ -979,7 +974,8 @@ class MyView extends View {
 	public void setdegreeY(float degreeY) {
 		this.degreeY = degreeY;
 		invalidate();
-	}	
+	}
+
 	/**
 	 * 値を渡す（GPS)
 	 */
@@ -988,6 +984,7 @@ class MyView extends View {
 		this.lon = lon;
 		invalidate();
 	}
+
 	/**
 	 * 値を渡す(distance)
 	 */
@@ -995,6 +992,7 @@ class MyView extends View {
 		this.distance = distance;
 		invalidate();
 	}
+
 	/**
 	 * 値を渡す(direction)
 	 */
@@ -1002,13 +1000,15 @@ class MyView extends View {
 		this.direction = direction;
 		invalidate();
 	}
+
 	/**
 	 * 値を渡す(dirtext)
 	 */
 	public void setDirtext(String dirtext) {
 		this.dirtext = dirtext;
 		invalidate();
-	}	
+	}
+
 	/**
 	 * 値を渡す(goal)
 	 */
@@ -1016,38 +1016,42 @@ class MyView extends View {
 		this.goal = goal;
 		invalidate();
 	}
-//	public void display(){
-//	/****/
-//	WindowManager wm = (WindowManager)this.getContext().getSystemService(Context.WINDOW_SERVICE);
-//	Display display = wm.getDefaultDisplay();
-//	DisplayMetrics displayMetrics = new DisplayMetrics();
-//	display.getMetrics(displayMetrics);
-//	Log.v("widthPixels",String.valueOf(displayMetrics.widthPixels));
-//	Log.v("heightPixels",String.valueOf(displayMetrics.heightPixels));
-//	/******/
-//	}
+
+	// public void display(){
+	// /****/
+	// WindowManager wm =
+	// (WindowManager)this.getContext().getSystemService(Context.WINDOW_SERVICE);
+	// Display display = wm.getDefaultDisplay();
+	// DisplayMetrics displayMetrics = new DisplayMetrics();
+	// display.getMetrics(displayMetrics);
+	// Log.v("widthPixels",String.valueOf(displayMetrics.widthPixels));
+	// Log.v("heightPixels",String.valueOf(displayMetrics.heightPixels));
+	// /******/
+	// }
 	/**
 	 * 描画処理を行う
 	 */
 	@Override
-	protected void onDraw (Canvas canvas) {
+	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-	
-		WindowManager wm = (WindowManager)this.getContext().getSystemService(Context.WINDOW_SERVICE);
+
+		WindowManager wm = (WindowManager) this.getContext().getSystemService(
+				Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		display.getMetrics(displayMetrics);
-//		Log.v("widthPixels",String.valueOf(displayMetrics.widthPixels));
-//		Log.v("heightPixels",String.valueOf(displayMetrics.heightPixels));
-		
-//		display();
+		// Log.v("widthPixels",String.valueOf(displayMetrics.widthPixels));
+		// Log.v("heightPixels",String.valueOf(displayMetrics.heightPixels));
+
+		// display();
 		// 背景色を設定
-		if(goal.equals("登場")){
+		if (goal.equals("登場")) {
 			canvas.drawColor(Color.TRANSPARENT);
-		}else{
+			
+		} else {
 			canvas.drawColor(0xffccff44);
 		}
-		
+
 		// 描画するための線の色を設定
 		Paint mainPaint = new Paint();
 		mainPaint.setStyle(Paint.Style.STROKE);
@@ -1058,123 +1062,156 @@ class MyView extends View {
 		subPaint.setStyle(Paint.Style.FILL);
 		subPaint.setARGB(255, 255, 0, 0);
 		subPaint.setTextSize(40);
-		
-		//		xp = (float) ((xp +(0.3*(xp-(displayMetrics.widthPixels)*(direction-degreeDir+45)/90)))/1.3);
-		//		staticfinalfloatALPHA = 0.15f;
-//		void lowPassFilter( float[] input, float[] output ) {
-//		    for (int i = 0; i < input.length; i++) {
-//		        output[i] = output[i] + ALPHA * (input[i] - output[i]);
-//		    }
-//		}
-		//		canvas.drawBitmap(myBitmap,(displayMetrics.widthPixels)/2,(displayMetrics.heightPixels)/2,mainPaint);
-//		Log.v("Bitmap","xp:" + xp);
-		yp = (yp+(displayMetrics.heightPixels)*(-degreeY)/90-400)/2;
-		//Bitmapイメージの描画
-		if(goal.equals("登場")){
-		
-			gap = direction - degreeDir ;
-			
-			if ( gap > -90 && gap < 90 ){
-			xp = (float) ((xp +(displayMetrics.widthPixels)*(gap+45)/90)/2);
-			canvas.drawBitmap(myBitmap,xp,yp,mainPaint);
-			} else if ( gap >= -360 && gap < -270 ){
-			xp = (float) ((xp +(displayMetrics.widthPixels)*(gap+405)/90)/2);	
-			canvas.drawBitmap(myBitmap,xp,yp,mainPaint);
-			} else if ( gap >270 && gap <= 360) {
-			xp = (float) ((xp +(displayMetrics.widthPixels)*(gap-315)/90)/2);
-			canvas.drawBitmap(myBitmap,xp,yp,mainPaint);
+
+		Paint charaPaint = new Paint();
+		mainPaint.setStyle(Paint.Style.STROKE);
+		mainPaint.setARGB(255, 0, 0, 0);
+		mainPaint.setTextSize(35);
+		mainPaint.setStrokeWidth(4);
+
+		// xp = (float) ((xp
+		// +(0.3*(xp-(displayMetrics.widthPixels)*(direction-degreeDir+45)/90)))/1.3);
+		// staticfinalfloatALPHA = 0.15f;
+		// void lowPassFilter( float[] input, float[] output ) {
+		// for (int i = 0; i < input.length; i++) {
+		// output[i] = output[i] + ALPHA * (input[i] - output[i]);
+		// }
+		// }
+		// canvas.drawBitmap(myBitmap,(displayMetrics.widthPixels)/2,(displayMetrics.heightPixels)/2,mainPaint);
+		// Log.v("Bitmap","xp:" + xp);
+
+		yp = (yp + (displayMetrics.heightPixels) * (-degreeY) / 90 - 400) / 2;
+		// Bitmapイメージの描画
+		if (goal.equals("登場")) {
+
+			gap = direction - degreeDir;
+
+			if (gap > -90 && gap < 90) {
+				xp = (float) ((xp + (displayMetrics.widthPixels) * (gap + 45)
+						/ 90) / 2);
+				canvas.drawBitmap(myBitmap, xp, yp, charaPaint);
+			} else if (gap >= -360 && gap < -270) {
+				xp = (float) ((xp + (displayMetrics.widthPixels) * (gap + 405)
+						/ 90) / 2);
+				canvas.drawBitmap(myBitmap, xp, yp, charaPaint);
+			} else if (gap > 270 && gap <= 360) {
+				xp = (float) ((xp + (displayMetrics.widthPixels) * (gap - 315)
+						/ 90) / 2);
+				canvas.drawBitmap(myBitmap, xp, yp, charaPaint);
 			} else {
 			}
-			
-		
-//		myBitmap2= Bitmap.createScaledBitmap(myBitmap,200,200, false);
-//		myBitmap2= Bitmap.createScaledBitmap(myBitmap,(int)(100*(30-distance)/30+100),(int)(100*(30-distance)/30+100), false);
-//		canvas.drawBitmap(myBitmap2,xp,yp,mainPaint);
-//		Log.i("Bitmap","degreeY:" + degreeY);
-//		Log.i("Bitmap", "YP:" + yp);
-		
-//		canvas.drawBitmap(myBitmap,100+(float)((int)(direction-degreeDir)*0.4)*10,100-pitch*5,mainPaint);
-//		Log.i("Bitmap", "相手角度:" + (direction));
-//		Log.i("Bitmap", "自分角度:" + (degreeDir));
-		
-		
-//		//WebViewの位置を移動
-//		arLayoutParams.setMargins(100, 100, 10, 10);
-//		//Layoutを更新
-//		arLayout.updateViewLayout(webView, arLayoutParams);
-//		vibrator.vibrate(1000);
+
+			// myBitmap2= Bitmap.createScaledBitmap(myBitmap,200,200, false);
+			// myBitmap2=
+			// Bitmap.createScaledBitmap(myBitmap,(int)(100*(30-distance)/30+100),(int)(100*(30-distance)/30+100),
+			// false);
+			// canvas.drawBitmap(myBitmap2,xp,yp,mainPaint);
+			// Log.i("Bitmap","degreeY:" + degreeY);
+			// Log.i("Bitmap", "YP:" + yp);
+
+			// canvas.drawBitmap(myBitmap,100+(float)((int)(direction-degreeDir)*0.4)*10,100-pitch*5,mainPaint);
+			// Log.i("Bitmap", "相手角度:" + (direction));
+			// Log.i("Bitmap", "自分角度:" + (degreeDir));
+
+			// //WebViewの位置を移動
+			// arLayoutParams.setMargins(100, 100, 10, 10);
 		}
-		
-		//音の再生
-		if(goal.equals("登場")){
-			//音の再生開始位置を0ミリセカンドの位置に設定する
-//			mp.seekTo(0);
-//			音の再生を開始する
-//			mp.start();
-		}else{
-			//音を停止する
+
+		// 音の再生
+		if (goal.equals("登場")) {
+			// 音の再生開始位置を0ミリセカンドの位置に設定する
+			// mp.seekTo(0);
+			// 音の再生を開始する
+			// mp.start();
+		} else {
+			// 音を停止する
 			mp.stop();
-			
-			//一度再生をstop()してから再び音を再生する場合には、prepare()を呼び出す必要がある
+
+			// 一度再生をstop()してから再び音を再生する場合には、prepare()を呼び出す必要がある
 			try {
 				mp.prepare();
-			} catch ( IllegalStateException e ) {
+			} catch (IllegalStateException e) {
 				e.printStackTrace();
-			} catch ( IOException e ) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		// 文字を描画
-		if(goal.equals("登場")){
-		
-		canvas.drawText("くまもん！" + goal, 10, 900, subPaint);
-		}else{
-//		canvas.drawText("" + yaw, 10, 10, mainPaint);
-//		canvas.drawText("" + roll, 10, 30, mainPaint);
-//		canvas.drawText("" + pitch, 10, 50, mainPaint);
-//		if (yawtext.equals("N") || yawtext.equals("E") || yawtext.equals("S") || yawtext.equals("W")){
-		canvas.drawText("" + yawtext, 230, 120, mainPaint);
-//		Log.i("Kadai", "yawtext="+yawtext);
-//		canvas.drawText(""+ yowtext1, 250, 159, mainPaint);
-//		}
-//		if (yawtext1.equals("N") || yawtext1.equals("E") || yawtext1.equals("S") || yawtext1.equals("W")){
-//		canvas.drawText("" + yawtext1, 280, 170, mainPaint);
-//		}
-//		canvas.drawText("" + lat, 10, 100, mainPaint);
-//		canvas.drawText("" + lon, 10, 120, mainPaint);
+		if (goal.equals("登場")) {
+			canvas.drawText("くまもん！" + goal, 10, 900, subPaint);
+		} else {
+			// canvas.drawText("" + yaw, 10, 10, mainPaint);
+			// canvas.drawText("" + roll, 10, 30, mainPaint);
+			// canvas.drawText("" + pitch, 10, 50, mainPaint);
+			// if (yawtext.equals("N") || yawtext.equals("E") ||
+			// yawtext.equals("S") || yawtext.equals("W")){
+			canvas.drawText("" + yawtext, displayMetrics.widthPixels / 2 - 20,
+					displayMetrics.heightPixels / 2 - 310, mainPaint);
+			// Log.i("Kadai", "yawtext="+yawtext);
+			// canvas.drawText(""+ yowtext1, 250, 159, mainPaint);
+			// }
+			// if (yawtext1.equals("N") || yawtext1.equals("E") ||
+			// yawtext1.equals("S") || yawtext1.equals("W")){
+			// canvas.drawText("" + yawtext1, 280, 170, mainPaint);
+			// }
+			// canvas.drawText("" + lat, 10, 100, mainPaint);
+			// canvas.drawText("" + lon, 10, 120, mainPaint);
 
-		canvas.drawText("目標までの距離:" + (int)distance +" m", 10, 600, mainPaint);
-//		canvas.drawText("" + direction, 10, 180, mainPaint);
+			canvas.drawText("目標までの距離:" + (int) distance + " m",
+					displayMetrics.widthPixels / 8,
+					displayMetrics.heightPixels * 15 / 16, mainPaint);
+			// canvas.drawText("" + direction, 10, 180, mainPaint);
 
-		canvas.drawText("目標の方向:" + dirtext, 10, 50, mainPaint);
-		canvas.drawText("" + goal, 10, 800, mainPaint);
-		
-		// 円を描画
-		canvas.drawCircle( 250, 300, 200, mainPaint );
-		canvas.drawCircle( 250, 300, 100, mainPaint );
-		canvas.drawRect(240, 290, 260, 310, mainPaint);
-		canvas.drawLine(110, 160, 240, 290, mainPaint);
-		canvas.drawLine(390, 160, 260, 290, mainPaint);
-		canvas.drawCircle((distance*(float)Math.sin(Math.toRadians(direction-(degreeDir))))/1+250, 
-				(-distance*(float)Math.cos(Math.toRadians(direction-(degreeDir))))/1+300, 10, subPaint);
+			canvas.drawText("目標の方向:" + dirtext, 10, 50, mainPaint);
+			// canvas.drawText("" + goal, 10, 800, mainPaint);
+
+			drawRadar(canvas, displayMetrics, mainPaint, subPaint);
 		}
-		
-		//バイブレータを動作させる
-		if(goal.equals("登場")){
+
+		// バイブレータを動作させる
+		if (goal.equals("登場")) {
 			vibrator.cancel();
-		}else if(dirtext.equals(yawtext)){
-		vibrator.vibrate(10);
+		} else if (dirtext.equals(yawtext)) {
+			vibrator.vibrate(10);
 		}
 	}
-//	public void onAcclerometerChanged(int dx,int dy,int dz){	//追加
-//		mDx = dx;
-//		mDy = dy;
-//		mDz = dz;
-//		invalidate();
-//	}
-//	public void onGpsChanged(double lat,double lon){
-//		mLat = lat;
-//		mLon = lon;
-//		invalidate();
-//	}
+
+	// public void onAcclerometerChanged(int dx,int dy,int dz){ //追加
+	// mDx = dx;
+	// mDy = dy;
+	// mDz = dz;
+	// invalidate();
+	// }
+
+	private void drawRadar(Canvas canvas, DisplayMetrics displayMetrics,
+			Paint mainPaint, Paint subPaint) {
+		// 円を描画
+		canvas.drawCircle(displayMetrics.widthPixels / 2,
+				displayMetrics.heightPixels / 2, 500, mainPaint);
+		canvas.drawCircle(displayMetrics.widthPixels / 2,
+				displayMetrics.heightPixels / 2, 300, mainPaint);
+		canvas.drawCircle(displayMetrics.widthPixels / 2,
+				displayMetrics.heightPixels / 2, 200, mainPaint);
+		canvas.drawCircle(displayMetrics.widthPixels / 2,
+				displayMetrics.heightPixels / 2, 100, mainPaint);
+		canvas.drawRect(displayMetrics.widthPixels / 2 - 10,
+				displayMetrics.heightPixels / 2 - 10,
+				displayMetrics.widthPixels / 2 + 10,
+				displayMetrics.heightPixels / 2 + 10, mainPaint);
+		canvas.drawLine(displayMetrics.widthPixels / 2 - 220,
+				displayMetrics.heightPixels / 4,
+				displayMetrics.widthPixels / 2 - 10,
+				displayMetrics.heightPixels / 2 - 10, mainPaint);
+		canvas.drawLine(displayMetrics.widthPixels / 2 + 220,
+				displayMetrics.heightPixels / 4,
+				displayMetrics.widthPixels / 2 + 10,
+				displayMetrics.heightPixels / 2 - 10, mainPaint);
+		canvas.drawCircle(
+				(distance * (float) Math.sin(Math.toRadians(direction
+						- (degreeDir))))
+						/ 1 + displayMetrics.widthPixels / 2,
+				(-distance * (float) Math.cos(Math.toRadians(direction
+						- (degreeDir))))
+						/ 1 + displayMetrics.heightPixels / 2, 15, subPaint);
+	}
 }

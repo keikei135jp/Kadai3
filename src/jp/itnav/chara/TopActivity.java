@@ -29,6 +29,10 @@ public class TopActivity extends Activity {
 		btn5.setText("滝沢");
 		Button btn6 = new Button(this);
 		btn6.setText("石川");
+		Button btn7 = new Button(this);
+		btn7.setText("青山");
+		Button btn8 = new Button(this);
+		btn8.setText("六本木");
 		
 		// レイアウトにボタンを追加
 		LinearLayout layout1 = new LinearLayout(this);
@@ -49,6 +53,12 @@ public class TopActivity extends Activity {
 		LinearLayout.LayoutParams.MATCH_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT));
 		layout1.addView(btn6,new LinearLayout.LayoutParams(
+		LinearLayout.LayoutParams.MATCH_PARENT,
+		LinearLayout.LayoutParams.WRAP_CONTENT));
+		layout1.addView(btn7,new LinearLayout.LayoutParams(
+		LinearLayout.LayoutParams.MATCH_PARENT,
+		LinearLayout.LayoutParams.WRAP_CONTENT));
+		layout1.addView(btn8,new LinearLayout.LayoutParams(
 		LinearLayout.LayoutParams.MATCH_PARENT,
 		LinearLayout.LayoutParams.WRAP_CONTENT));
 		
@@ -88,6 +98,18 @@ public class TopActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				showDetail(5);
+			}
+		});
+		btn7.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showDetail(6);
+			}
+		});
+		btn8.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showDetail(7);
 			}
 		});
 	}
