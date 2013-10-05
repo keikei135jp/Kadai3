@@ -1,17 +1,17 @@
 package jp.itnav.chara;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+//import java.io.File;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
+//import java.util.List;
 
 import android.location.Location;
 import android.media.MediaPlayer;
-import android.net.Uri;
+//import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+//import android.os.Environment;
 import android.os.Vibrator;
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,15 +20,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
+//import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
+//import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.hardware.Camera;
-import android.hardware.Camera.Size;
+//import android.graphics.Rect;
+//import android.hardware.Camera;
+//import android.hardware.Camera.Size;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -36,10 +36,10 @@ import android.hardware.SensorManager;
 import android.util.DisplayMetrics;
 //import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
+//import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+//import android.view.SurfaceHolder;
+//import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -61,7 +61,6 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 	public static boolean isAppForeground = false;
 	private Dialog errorDialog;
 
-//	private static final String TAG = "KadaiMainActivity";
 	private static final int LOCATION_UPDATES_INTERVAL = 20000; 
 	// Setting 2sec interval for location updates
 	private static final int ERROR_DIALOG_ON_CREATE_REQUEST_CODE = 4055;
@@ -86,6 +85,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 			36.662764, 35.664625, 35.667338, 38.26229 };
 	double[] d = { 141.309406, 140.989287, 140.87009, 141.119523, 141.137205,
 			136.739514, 139.711681, 139.728584, 140.881017 };
+	int param;
 
 	String goal;
 	float distance;
@@ -103,7 +103,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 		checkGooglePlayServiceAvailability(ERROR_DIALOG_ON_CREATE_REQUEST_CODE);
 
 		Intent intent = getIntent();
-		int param = intent.getIntExtra("ID", 0);
+		param = intent.getIntExtra("ID", 0);
 
 		// クラスのインスタンスを生成
 		mView = new MyView(this, param);
@@ -120,33 +120,8 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 				.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);// 20130526
 		mRegisteredSensor = false; // 追加
 
-		// 20130527削除
-		// if (sensors.size() > 0) {
-		// Sensor s = sensors.get(0);
-		// sensorManager.registerListener(this, s,
-		// SensorManager.SENSOR_DELAY_UI);
-		// Log.v("OnResume", "PASS");
-		// if (locman != null){
-		// locman.removeUpdates(this);
-		// locman.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		// locman.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-		// 0,0,this);
-		// location = locman.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		// }else{
-		// Toast.makeText(this, "failed to get location from GPS",
-		// Toast.LENGTH_LONG).show();
-		// }
-		// if (locman.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-		// locman.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-		// 10000, 10, this);
-		// location =
-		// locman.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		// } else {
-		// Toast.makeText(this, "failed to get location from NETWORK",
-		// Toast.LENGTH_LONG).show();
-		// }
-		// super.onResume();
 	}
+	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
@@ -193,6 +168,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 			float degreeDir = (float) Math.toDegrees(inorientation[0]);
 			float degreeY = (float) Math.toDegrees(inorientation[1]);
 
+			
 			// event.valuesをdegreeDirに
 			if (degreeDir <= -157.5) {
 				yawtext = a[0];
@@ -259,7 +235,7 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 			SensorManager.getOrientation(outR, out);
 		}
 	}
-
+	
 	private void init() {
 		// Initialize Location Client
 		if (locationClient == null) {
@@ -288,14 +264,13 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 			}
 		}
 	}
-
 	private void handleLocation(Location location) {
 		
 		lastLocation = location;
 		mView.setGps("" + location.getLatitude(), "" + location.getLongitude());
 
-		Intent intent = getIntent();
-		int param = intent.getIntExtra("ID", 0);
+//		Intent intent = getIntent();
+//		int param = intent.getIntExtra("ID", 0);
 		Location imglocation = new Location("apiopost");
 		imglocation.setLatitude(c[param]);
 		imglocation.setLongitude(d[param]);
@@ -326,13 +301,10 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 		}
 		mView.setDirtext("" + dirtext);
 		mView.setGoal("" + goal);
-		if (distance < 30) {
+		if (distance < 200) {
 			goal = "登場";
-//			CameraView mCamera = new CameraView(this);// cameraview変更
-//			setContentView(mCamera);// cameraview変更
-//			mCamera.setView(mView);// cameraview変更
-//			addContentView(mView, new LayoutParams(LayoutParams.WRAP_CONTENT,+LayoutParams.WRAP_CONTENT));
-			setPrefer(param);		
+			setPrefer(param);	
+			showCamera(param);
 		} else {
 			goal = "隠れているのは・・・";
 		}
@@ -394,8 +366,6 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 			// mView.setGps("" + location.getLatitude(), "" +
 			// location.getLongitude());
 			//
-			// Intent intent = getIntent();
-			// int param =intent.getIntExtra("ID",0);
 			// Location imglocation = new Location("apiopost");
 			// imglocation.setLatitude(c[param]);
 			// imglocation.setLongitude(d[param]);
@@ -500,6 +470,14 @@ public class KadaiMainActivity extends Activity implements SensorEventListener {
 		if (mSensorManager != null) {
 			mSensorManager.unregisterListener(this);
 		}
+	}
+	private void showCamera(int param){
+		// TODO Auto-generated method stub
+		// インテントのインスタンス生成
+		Intent intent2 = new Intent(this, CameraActivity.class);
+		intent2.putExtra("ID",param);
+		// 次画面のアクティビティ起動
+		startActivity(intent2);
 	}
 }
 
@@ -704,14 +682,6 @@ class MyView extends View {
 			} else {
 			}
 
-			// myBitmap2= Bitmap.createScaledBitmap(myBitmap,200,200, false);
-			// myBitmap2=
-			// Bitmap.createScaledBitmap(myBitmap,(int)(100*(30-distance)/30+100),(int)(100*(30-distance)/30+100),
-			// false);
-			// canvas.drawBitmap(myBitmap2,xp,yp,mainPaint);
-			// Log.i("Bitmap","degreeY:" + degreeY);
-			// Log.i("Bitmap", "YP:" + yp);
-
 			// canvas.drawBitmap(myBitmap,100+(float)((int)(direction-degreeDir)*0.4)*10,100-pitch*5,mainPaint);
 			// Log.i("Bitmap", "相手角度:" + (direction));
 			// Log.i("Bitmap", "自分角度:" + (degreeDir));
@@ -739,6 +709,8 @@ class MyView extends View {
 		// 文字を描画
 		if (goal.equals("登場")) {
 			canvas.drawText("くまもん！" + goal, 10, 900, subPaint);
+			
+			
 		} else {
 			canvas.drawText("" + yawtext, displayMetrics.widthPixels / 2 - 20,
 					displayMetrics.heightPixels / 2 - 310, mainPaint);
@@ -755,6 +727,7 @@ class MyView extends View {
 			vibrator.vibrate(10);
 		}
 	}
+	
 	private void drawRadar(Canvas canvas, DisplayMetrics displayMetrics,
 			Paint mainPaint, Paint subPaint) {
 		// 円を描画

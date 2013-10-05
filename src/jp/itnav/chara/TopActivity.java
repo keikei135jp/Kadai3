@@ -12,6 +12,7 @@ import android.view.View;
 
 
 public class TopActivity extends Activity {
+	
 	Button btn1;
 	Button btn2;
 	Button btn3;
@@ -128,8 +129,8 @@ public class TopActivity extends Activity {
 		super.onResume();
 		
 		SharedPreferences prefer = getSharedPreferences("getchara", MODE_PRIVATE);
+		btn1.setText(prefer.getString("石巻", "石巻"));		
 		
-		btn1.setText(prefer.getString("石巻", ""));
 	}
 	private void showDetail(int id){
 		// TODO Auto-generated method stub
@@ -139,6 +140,11 @@ public class TopActivity extends Activity {
 		// 次画面のアクティビティ起動
 		startActivity(intent);
 	}
-
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+	
 	
 }
